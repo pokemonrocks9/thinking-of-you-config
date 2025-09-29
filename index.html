@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thinking of You - Setup</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 28px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .heart {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .section h2 {
+      font-size: 18px;
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .link-code-display {
+      background: #667eea;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    .link-code-display .code {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+    
+    .link-code-display .label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .radio-group {
+      margin: 15px 0;
+    }
+    
+    .radio-option {
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .radio-option:hover {
+      border-color: #667eea;
+      background: #f5f7ff;
+    }
+    
+    .radio-option input[type="radio"] {
+      margin-right: 10px;
+    }
+    
+    .radio-option.selected {
+      border-color: #667eea;
+      background: #f5f7ff;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 20px;
+    }
+    
+    button:hover {
+      background: #5568d3;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    .error {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="heart">♥</div>
+    <h1>Thinking of You</h1>
+    <p class="subtitle">Stay connected across the distance</p>
+    
+    <div class="section">
+      <h2>Your Information</h2>
+      <label for="myName">Your Name</label>
+      <input type="text" id="myName" placeholder="Enter your name" maxlength="30">
+    </div>
+    
+    <div class="section">
+      <h2>Connection Setup</h2>
+      <div class="radio-group">
+        <label class="radio-option" id="createOption">
+          <input type="radio" name="setupType" value="create" checked>
+          <strong>Create New Connection</strong><br>
+          <small>Start a new connection and share your code</small>
+        </label>
+        
+        <label class="radio-option" id="joinOption">
+          <input type="radio" name="setupType" value="join">
+          <strong>Join Existing Connection</strong><br>
+          <small>Enter your partner's code to connect</small>
+        </label>
+      </div>
+      
+      <div id="createSection">
+        <div class="link-code-display">
+          <div class="label">Your Link Code</div>
+          <div class="code" id="linkCodeDisplay">------</div>
+          <div class="label">Share this code with your partner</div>
+        </div>
+        <div class="info-box">
+          📱 Your partner should select "Join Existing Connection" and enter this code to connect with you.
+        </div>
+      </div>
+      
+      <div id="joinSection" class="hidden">
+        <label for="partnerLinkCode">Partner's Link Code</label>
+        <input type="text" id="partnerLinkCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
+        <div class="info-box">
+          🔗 Ask your partner for their 6-character link code and enter it here.
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Partner Information</h2>
+      <label for="partnerName">Partner's Name</label>
+      <input type="text" id="partnerName" placeholder="Enter partner's name" maxlength="30">
+    </div>
+    
+    <div class="error" id="errorMessage"></div>
+    
+    <button onclick="saveConfig()">Save & Connect ♥</button>
+  </div>
+  
+  <script>
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const linkCode = urlParams.get('linkCode') || '';
+    const myName = urlParams.get('myName') || '';
+    const partnerName = urlParams.get('partnerName') || '';
+    
+    // Initialize form
+    document.getElementById('myName').value = myName;
+    document.getElementById('partnerName').value = partnerName;
+    document.getElementById('linkCodeDisplay').textContent = linkCode;
+    
+    // Setup type radio buttons
+    const createOption = document.getElementById('createOption');
+    const joinOption = document.getElementById('joinOption');
+    const createSection = document.getElementById('createSection');
+    const joinSection = document.getElementById('joinSection');
+    
+    document.querySelectorAll('input[name="setupType"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.value === 'create') {
+          createSection.classList.remove('hidden');
+          joinSection.classList.add('hidden');
+          createOption.classList.add('selected');
+          joinOption.classList.remove('selected');
+        } else {
+          createSection.classList.add('hidden');
+          joinSection.classList.remove('hidden');
+          createOption.classList.remove('selected');
+          joinOption.classList.add('selected');
+        }
+      });
+    });
+    
+    // Auto-uppercase partner link code
+    document.getElementById('partnerLinkCode').addEventListener('input', function(e) {
+      this.value = this.value.toUpperCase();
+    });
+    
+    function saveConfig() {
+      const myNameInput = document.getElementById('myName').value.trim();
+      const partnerNameInput = document.getElementById('partnerName').value.trim();
+      const setupType = document.querySelector('input[name="setupType"]:checked').value;
+      const errorMsg = document.getElementById('errorMessage');
+      
+      // Validation
+      if (!myNameInput) {
+        errorMsg.textContent = 'Please enter your name';
+        errorMsg.style.display = 'block';
+        return;
+      }
+      
+      if (!partnerNameInput) {
+        errorMsg.textContent = 'Please enter your partner\'s name';
+        errorMsg.style.display = 'block';
+        return;
+      }
+      
+      let partnerLinkCode = '';
+      if (setupType === 'join') {
+        partnerLinkCode = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
+        if (partnerLinkCode.length !== 6) {
+          errorMsg.textContent = 'Please enter a valid 6-character link code';
+          errorMsg.style.display = 'block';
+          return;
+        }
+      }
+      
+      // Prepare config data
+      const configData = {
+        myName: myNameInput,
+        partnerName: partnerNameInput
+      };
+      
+      if (setupType === 'join') {
+        configData.partnerLinkCode = partnerLinkCode;
+      }
+      
+      // Send back to Pebble
+      const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
+      window.location.href = returnUrl;
+    }
+  </script>
+</body>
+</html>
