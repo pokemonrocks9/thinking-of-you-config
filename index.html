@@ -212,6 +212,12 @@
         <div class="info-box">
           📱 Your partner should select "Join Existing Connection" and enter this code to connect with you.
         </div>
+        
+        <label for="webhookUrl">Discord Webhook URL (Optional)</label>
+        <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+        <div class="info-box">
+          💬 For instant Discord notifications, create a webhook in your server (Server Settings → Integrations → Webhooks) and paste the URL here. Leave blank to use only in-app notifications.
+        </div>
       </div>
       
       <div id="joinSection" class="hidden">
@@ -288,6 +294,8 @@
       }
       
       let partnerLinkCode = '';
+      let webhookUrl = '';
+      
       if (setupType === 'join') {
         partnerLinkCode = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
         if (partnerLinkCode.length !== 6) {
@@ -295,11 +303,14 @@
           errorMsg.style.display = 'block';
           return;
         }
+      } else {
+        webhookUrl = document.getElementById('webhookUrl').value.trim();
       }
       
       const configData = {
         myName: myNameInput,
-        partnerName: partnerNameInput
+        partnerName: partnerNameInput,
+        webhookUrl: webhookUrl
       };
       
       if (setupType === 'join') {
