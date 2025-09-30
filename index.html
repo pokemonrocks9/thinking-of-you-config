@@ -235,18 +235,15 @@
   </div>
   
   <script>
-    // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
     const partnerName = urlParams.get('partnerName') || '';
     
-    // Initialize form
     document.getElementById('myName').value = myName;
     document.getElementById('partnerName').value = partnerName;
     document.getElementById('linkCodeDisplay').textContent = linkCode;
     
-    // Setup type radio buttons
     const createOption = document.getElementById('createOption');
     const joinOption = document.getElementById('joinOption');
     const createSection = document.getElementById('createSection');
@@ -268,7 +265,6 @@
       });
     });
     
-    // Auto-uppercase partner link code
     document.getElementById('partnerLinkCode').addEventListener('input', function(e) {
       this.value = this.value.toUpperCase();
     });
@@ -279,7 +275,6 @@
       const setupType = document.querySelector('input[name="setupType"]:checked').value;
       const errorMsg = document.getElementById('errorMessage');
       
-      // Validation
       if (!myNameInput) {
         errorMsg.textContent = 'Please enter your name';
         errorMsg.style.display = 'block';
@@ -302,7 +297,6 @@
         }
       }
       
-      // Prepare config data
       const configData = {
         myName: myNameInput,
         partnerName: partnerNameInput
@@ -312,9 +306,23 @@
         configData.partnerLinkCode = partnerLinkCode;
       }
       
-      // Send back to Pebble
-      const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
-      window.location.href = returnUrl;
+      const container = document.querySelector('.container');
+      container.innerHTML = `
+        <div class="heart" style="font-size: 60px; margin: 40px 0;">✓</div>
+        <h1 style="color: #4caf50; margin-bottom: 20px;">Settings Saved!</h1>
+        <p style="text-align: center; font-size: 18px; color: #666;">
+          Your connection is configured.<br>
+          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + linkCode}
+        </p>
+        <p style="text-align: center; margin-top: 20px; color: #999; font-size: 14px;">
+          Returning to watch...
+        </p>
+      `;
+      
+      setTimeout(function() {
+        const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
+        window.location.href = returnUrl;
+      }, 1500);
     }
   </script>
 </body>
