@@ -114,6 +114,16 @@
       line-height: 1.6;
     }
     
+    .warning-box {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
     .radio-group {
       margin: 15px 0;
     }
@@ -185,6 +195,9 @@
       <h2>Your Information</h2>
       <label for="myName">Your Name</label>
       <input type="text" id="myName" placeholder="Enter your name" maxlength="30">
+      <div id="nameChangeWarning" class="warning-box hidden">
+        ⚠️ Changing your name will update it for this connection. Your partner will see the new name.
+      </div>
     </div>
     
     <div class="section">
@@ -216,7 +229,7 @@
         <label for="webhookUrl">Discord Webhook URL (Optional)</label>
         <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
         <div class="info-box">
-          💬 For instant Discord notifications, create a webhook in your server (Server Settings → Integrations → Webhooks) and paste the URL here. Leave blank to use only in-app notifications.
+          💬 For instant Discord notifications, create a webhook in your server (Server Settings → Integrations → Webhooks) and paste the URL here. Leave blank to use only in-app notifications. You can add or change this anytime!
         </div>
       </div>
       
@@ -225,6 +238,12 @@
         <input type="text" id="partnerLinkCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
         <div class="info-box">
           🔗 Ask your partner for their 6-character link code and enter it here.
+        </div>
+        
+        <label for="webhookUrlJoin">Discord Webhook URL (Optional)</label>
+        <input type="text" id="webhookUrlJoin" placeholder="https://discord.com/api/webhooks/...">
+        <div class="info-box">
+          💬 You can add a Discord webhook even when joining. Either partner can set up notifications!
         </div>
       </div>
     </div>
@@ -245,10 +264,26 @@
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
     const partnerName = urlParams.get('partnerName') || '';
+    const webhookUrl = urlParams.get('webhookUrl') || '';
+    
+    // Store original name to detect changes
+    const originalMyName = myName;
     
     document.getElementById('myName').value = myName;
     document.getElementById('partnerName').value = partnerName;
-    document.getElementById('linkCodeDisplay').textContent = linkCode;
+    document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
+    document.getElementById('webhookUrl').value = webhookUrl;
+    document.getElementById('webhookUrlJoin').value = webhookUrl;
+    
+    // Show name change warning if user modifies their name
+    document.getElementById('myName').addEventListener('input', function() {
+      const nameChangeWarning = document.getElementById('nameChangeWarning');
+      if (originalMyName && this.value.trim() !== originalMyName) {
+        nameChangeWarning.classList.remove('hidden');
+      } else {
+        nameChangeWarning.classList.add('hidden');
+      }
+    });
     
     const createOption = document.getElementById('createOption');
     const joinOption = document.getElementById('joinOption');
@@ -294,7 +329,7 @@
       }
       
       let partnerLinkCode = '';
-      let webhookUrl = '';
+      let webhookUrlValue = '';
       
       if (setupType === 'join') {
         partnerLinkCode = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
@@ -303,15 +338,21 @@
           errorMsg.style.display = 'block';
           return;
         }
+        webhookUrlValue = document.getElementById('webhookUrlJoin').value.trim();
       } else {
-        webhookUrl = document.getElementById('webhookUrl').value.trim();
+        webhookUrlValue = document.getElementById('webhookUrl').value.trim();
       }
       
       const configData = {
         myName: myNameInput,
         partnerName: partnerNameInput,
-        webhookUrl: webhookUrl
+        webhookUrl: webhookUrlValue
       };
+      
+      // Include oldName if the name has changed (for server update logic)
+      if (originalMyName && originalMyName !== myNameInput) {
+        configData.oldName = originalMyName;
+      }
       
       if (setupType === 'join') {
         configData.partnerLinkCode = partnerLinkCode;
@@ -323,7 +364,7 @@
         <h1 style="color: #4caf50; margin-bottom: 20px;">Settings Saved!</h1>
         <p style="text-align: center; font-size: 18px; color: #666;">
           Your connection is configured.<br>
-          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + linkCode}
+          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + (linkCode || 'NEW')}
         </p>
         <p style="text-align: center; margin-top: 20px; color: #999; font-size: 14px;">
           Returning to watch...
