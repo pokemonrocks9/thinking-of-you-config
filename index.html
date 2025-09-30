@@ -284,11 +284,7 @@
       </div>
     </div>
     
-    <div class="section" id="partnerSection">
-      <h2>Partner Information</h2>
-      <label for="partnerName">Partner's Name</label>
-      <input type="text" id="partnerName" placeholder="Enter partner's name" maxlength="30">
-    </div>
+
     
     <div class="error" id="errorMessage"></div>
     
@@ -301,18 +297,14 @@
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
-    const partnerName = urlParams.get('partnerName') || '';
     const webhookUrl = urlParams.get('webhookUrl') || '';
     
     const originalMyName = myName;
     let selectedMyName = '';
-    let detectedPartnerName = '';
     
     document.getElementById('myName').value = myName;
-    document.getElementById('partnerName').value = partnerName;
     document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
     document.getElementById('webhookUrl').value = webhookUrl;
-    document.getElementById('webhookUrlJoin').value = webhookUrl;
     
     document.getElementById('myName').addEventListener('input', function() {
       const nameChangeWarning = document.getElementById('nameChangeWarning');
@@ -394,10 +386,8 @@
     
     function selectName(name, allNames) {
       selectedMyName = name;
-      detectedPartnerName = allNames.find(n => n !== name) || '';
       
       document.getElementById('myName').value = name;
-      document.getElementById('partnerName').value = detectedPartnerName;
       
       document.querySelectorAll('.name-button').forEach(btn => {
         if (btn.textContent === name) {
@@ -410,18 +400,11 @@
     
     function saveConfig() {
       const myNameInput = document.getElementById('myName').value.trim();
-      const partnerNameInput = document.getElementById('partnerName').value.trim();
       const setupType = document.querySelector('input[name="setupType"]:checked').value;
       const errorMsg = document.getElementById('errorMessage');
       
       if (!myNameInput) {
         errorMsg.textContent = 'Please enter your name';
-        errorMsg.style.display = 'block';
-        return;
-      }
-      
-      if (!partnerNameInput) {
-        errorMsg.textContent = 'Please enter your partner\'s name';
         errorMsg.style.display = 'block';
         return;
       }
@@ -442,7 +425,6 @@
       
       const configData = {
         myName: myNameInput,
-        partnerName: partnerNameInput,
         webhookUrl: webhookUrlValue
       };
       
