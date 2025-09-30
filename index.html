@@ -281,12 +281,6 @@
         <div class="info-box">
           🔗 Ask your partner for their 6-character link code and enter it here.
         </div>
-        
-        <label for="webhookUrlJoin">Discord Webhook URL (Optional)</label>
-        <input type="text" id="webhookUrlJoin" placeholder="https://discord.com/api/webhooks/...">
-        <div class="info-box">
-          💬 You can add a Discord webhook even when joining. Either partner can set up notifications!
-        </div>
       </div>
     </div>
     
@@ -442,7 +436,6 @@
           errorMsg.style.display = 'block';
           return;
         }
-        webhookUrlValue = document.getElementById('webhookUrlJoin').value.trim();
       } else {
         webhookUrlValue = document.getElementById('webhookUrl').value.trim();
       }
