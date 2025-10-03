@@ -284,8 +284,6 @@
       </div>
     </div>
     
-
-    
     <div class="error" id="errorMessage"></div>
     
     <button onclick="saveConfig()">Save & Connect ♥</button>
@@ -293,6 +291,11 @@
   
   <script>
     const API_ENDPOINT = 'https://mute-elsinore-pokyplays-01040d8f.koyeb.app/api';
+    
+    // Detect platform
+    const userAgent = navigator.userAgent || '';
+    const isPebble = userAgent.includes('Pebble') || document.referrer.includes('pebble');
+    const isBangle = !isPebble; // Default to Bangle if not Pebble
     
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
@@ -450,8 +453,49 @@
       `;
       
       setTimeout(function() {
-        const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
-        window.location.href = returnUrl;
+        if (isPebble) {
+          // Pebble return method
+          const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
+          window.location.href = returnUrl;
+        } else {
+          // Bangle.js return methods
+          try {
+            // Method 1: Direct return via GB function (if available)
+            if (typeof GB === 'function') {
+              GB(configData);
+              return;
+            }
+            
+            // Method 2: PostMessage to parent
+            if (window.parent !== window) {
+              window.parent.postMessage({
+                type: 'ok',
+                data: configData
+              }, '*');
+            }
+            
+            // Method 3: PostMessage to opener
+            if (window.opener) {
+              window.opener.postMessage({
+                type: 'ok',
+                data: configData
+              }, '*');
+              window.close();
+            }
+            
+            // Method 4: Set in fragment and close
+            window.location.hash = '#' + JSON.stringify(configData);
+            
+            // Try to close after a delay
+            setTimeout(function() {
+              if (window.close) {
+                window.close();
+              }
+            }, 500);
+          } catch (e) {
+            console.error('Error returning data:', e);
+          }
+        }
       }, 1500);
     }
   </script>
