@@ -372,11 +372,6 @@
   <script>
     const API_ENDPOINT = 'https://mute-elsinore-pokyplays-01040d8f.koyeb.app/api';
     
-    // Detect platform
-    const userAgent = navigator.userAgent || '';
-    const isPebble = userAgent.includes('Pebble') || document.referrer.includes('pebble');
-    const isBangle = !isPebble;
-    
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
@@ -386,6 +381,11 @@
     const originalMyName = myName;
     let selectedMyName = '';
     let locationEnabled = shareLocation;
+    
+    console.log('Config page loaded');
+    console.log('linkCode:', linkCode);
+    console.log('myName:', myName);
+    console.log('shareLocation:', shareLocation);
     
     document.getElementById('myName').value = myName;
     document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
@@ -551,43 +551,17 @@
         </p>
       `;
       
+      console.log('Attempting to return to Pebble...');
+      console.log('configData:', JSON.stringify(configData));
+      
       setTimeout(function() {
-        if (isPebble) {
-          const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
-          window.location.href = returnUrl;
-        } else {
-          try {
-            if (typeof GB === 'function') {
-              GB(configData);
-              return;
-            }
-            
-            if (window.parent !== window) {
-              window.parent.postMessage({
-                type: 'ok',
-                data: configData
-              }, '*');
-            }
-            
-            if (window.opener) {
-              window.opener.postMessage({
-                type: 'ok',
-                data: configData
-              }, '*');
-              window.close();
-            }
-            
-            window.location.hash = '#' + JSON.stringify(configData);
-            
-            setTimeout(function() {
-              if (window.close) {
-                window.close();
-              }
-            }, 500);
-          } catch (e) {
-            console.error('Error returning data:', e);
-          }
-        }
+        const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
+        console.log('Return URL:', returnUrl);
+        console.log('Return URL length:', returnUrl.length);
+        
+        // Set the location to return to Pebble
+        window.location.href = returnUrl;
+        console.log('window.location.href set - should return to Pebble now');
       }, 1500);
     }
   </script>
