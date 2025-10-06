@@ -82,6 +82,72 @@
       border-color: #667eea;
     }
     
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin: 15px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .toggle-container:hover {
+      border-color: #667eea;
+    }
+    
+    .toggle-container.active {
+      border-color: #667eea;
+      background: #f5f7ff;
+    }
+    
+    .toggle-label {
+      flex: 1;
+    }
+    
+    .toggle-label strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    
+    .toggle-label small {
+      color: #666;
+      font-size: 13px;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 13px;
+      transition: background 0.3s;
+    }
+    
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    
+    .toggle-container.active .toggle-switch {
+      background: #667eea;
+    }
+    
+    .toggle-container.active .toggle-switch::after {
+      transform: translateX(24px);
+    }
+    
     .link-code-display {
       background: #667eea;
       color: white;
@@ -234,6 +300,20 @@
     </div>
     
     <div class="section">
+      <h2>Privacy Settings</h2>
+      <div class="toggle-container" id="locationToggle" onclick="toggleLocation()">
+        <div class="toggle-label">
+          <strong>Share Location with Pings</strong>
+          <small>When enabled, your pings will include your distance from your partner</small>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="info-box">
+        🔒 Your exact location is encrypted before being sent. Only you and your partner can see the distance between you.
+      </div>
+    </div>
+    
+    <div class="section">
       <h2>Connection Setup</h2>
       <div class="radio-group">
         <label class="radio-option" id="createOption">
@@ -295,19 +375,36 @@
     // Detect platform
     const userAgent = navigator.userAgent || '';
     const isPebble = userAgent.includes('Pebble') || document.referrer.includes('pebble');
-    const isBangle = !isPebble; // Default to Bangle if not Pebble
+    const isBangle = !isPebble;
     
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
     const webhookUrl = urlParams.get('webhookUrl') || '';
+    const shareLocation = urlParams.get('shareLocation') === 'true';
     
     const originalMyName = myName;
     let selectedMyName = '';
+    let locationEnabled = shareLocation;
     
     document.getElementById('myName').value = myName;
     document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
     document.getElementById('webhookUrl').value = webhookUrl;
+    
+    // Set initial location toggle state
+    if (locationEnabled) {
+      document.getElementById('locationToggle').classList.add('active');
+    }
+    
+    function toggleLocation() {
+      const toggle = document.getElementById('locationToggle');
+      locationEnabled = !locationEnabled;
+      if (locationEnabled) {
+        toggle.classList.add('active');
+      } else {
+        toggle.classList.remove('active');
+      }
+    }
     
     document.getElementById('myName').addEventListener('input', function() {
       const nameChangeWarning = document.getElementById('nameChangeWarning');
@@ -428,7 +525,8 @@
       
       const configData = {
         myName: myNameInput,
-        webhookUrl: webhookUrlValue
+        webhookUrl: webhookUrlValue,
+        shareLocation: locationEnabled
       };
       
       if (originalMyName && originalMyName !== myNameInput) {
@@ -445,7 +543,8 @@
         <h1 style="color: #4caf50; margin-bottom: 20px;">Settings Saved!</h1>
         <p style="text-align: center; font-size: 18px; color: #666;">
           Your connection is configured.<br>
-          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + (linkCode || 'NEW')}
+          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + (linkCode || 'NEW')}<br>
+          <small style="color: #999;">Location sharing: ${locationEnabled ? 'Enabled' : 'Disabled'}</small>
         </p>
         <p style="text-align: center; margin-top: 20px; color: #999; font-size: 14px;">
           Returning to watch...
@@ -454,19 +553,15 @@
       
       setTimeout(function() {
         if (isPebble) {
-          // Pebble return method
           const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
           window.location.href = returnUrl;
         } else {
-          // Bangle.js return methods
           try {
-            // Method 1: Direct return via GB function (if available)
             if (typeof GB === 'function') {
               GB(configData);
               return;
             }
             
-            // Method 2: PostMessage to parent
             if (window.parent !== window) {
               window.parent.postMessage({
                 type: 'ok',
@@ -474,7 +569,6 @@
               }, '*');
             }
             
-            // Method 3: PostMessage to opener
             if (window.opener) {
               window.opener.postMessage({
                 type: 'ok',
@@ -483,10 +577,8 @@
               window.close();
             }
             
-            // Method 4: Set in fragment and close
             window.location.hash = '#' + JSON.stringify(configData);
             
-            // Try to close after a delay
             setTimeout(function() {
               if (window.close) {
                 window.close();
