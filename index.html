@@ -190,6 +190,49 @@
       line-height: 1.6;
     }
     
+    .success-box {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .success-box {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .name-button {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    .name-button:hover {
+      background: #f5f7ff;
+    }
+    
+    .name-button.selected {
+      background: #667eea;
+      color: white;
+    }
+    
     .radio-group {
       margin: 15px 0;
     }
@@ -215,6 +258,29 @@
     .radio-option.selected {
       border-color: #667eea;
       background: #f5f7ff;
+    }
+    
+    .name-button {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    .name-button:hover {
+      background: #f5f7ff;
+    }
+    
+    .name-button.selected {
+      background: #667eea;
+      color: white;
     }
     
     .hidden {
@@ -309,29 +375,26 @@
         <label for="webhookUrl">Discord Webhook URL (Optional)</label>
         <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
         <div class="info-box">
-          💬 For instant Discord notifications, create a webhook in your server (Server Settings → Integrations → Webhooks) and paste the URL here. Leave blank to use only in-app notifications. You can add or change this anytime!
+          💬 For instant Discord notifications, create a webhook in your server and paste the URL here. Leave blank to use only in-app notifications.
         </div>
       </div>
       
       <div id="joinSection" class="hidden">
         <label for="partnerLinkCode">Partner's Link Code</label>
         <input type="text" id="partnerLinkCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
+        <button type="button" onclick="checkLinkCode()" style="margin-top: 10px;">Check Code</button>
+        
+        <div id="nameSelectionSection" class="hidden">
+          <div class="success-box">
+            ✓ Found existing connection! Which person are you?
+          </div>
+          <div id="nameButtons"></div>
+        </div>
+        
         <div class="info-box">
           🔗 Ask your partner for their 6-character link code and enter it here.
         </div>
-        
-        <label for="webhookUrlJoin">Discord Webhook URL (Optional)</label>
-        <input type="text" id="webhookUrlJoin" placeholder="https://discord.com/api/webhooks/...">
-        <div class="info-box">
-          💬 You can add a Discord webhook even when joining. Either partner can set up notifications!
-        </div>
       </div>
-    </div>
-    
-    <div class="section">
-      <h2>Partner Information</h2>
-      <label for="partnerName">Partner's Name</label>
-      <input type="text" id="partnerName" placeholder="Enter partner's name" maxlength="30">
     </div>
     
     <div class="error" id="errorMessage"></div>
@@ -340,27 +403,26 @@
   </div>
   
   <script>
+    const API_ENDPOINT = 'https://mute-elsinore-pokyplays-01040d8f.koyeb.app/api';
+    
     const urlParams = new URLSearchParams(window.location.search);
     const linkCode = urlParams.get('linkCode') || '';
     const myName = urlParams.get('myName') || '';
-    const partnerName = urlParams.get('partnerName') || '';
     const webhookUrl = urlParams.get('webhookUrl') || '';
     const shareLocation = urlParams.get('shareLocation') === 'true';
     
     const originalMyName = myName;
+    let selectedMyName = '';
     let locationEnabled = shareLocation;
     
     console.log('Config page loaded');
     console.log('linkCode:', linkCode);
     console.log('myName:', myName);
-    console.log('partnerName:', partnerName);
     console.log('shareLocation:', shareLocation);
     
     document.getElementById('myName').value = myName;
-    document.getElementById('partnerName').value = partnerName;
     document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
     document.getElementById('webhookUrl').value = webhookUrl;
-    document.getElementById('webhookUrlJoin').value = webhookUrl;
     
     // Set initial location toggle state
     if (locationEnabled) {
@@ -409,22 +471,73 @@
     
     document.getElementById('partnerLinkCode').addEventListener('input', function(e) {
       this.value = this.value.toUpperCase();
+      document.getElementById('nameSelectionSection').classList.add('hidden');
     });
+    
+    async function checkLinkCode() {
+      const code = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
+      const errorMsg = document.getElementById('errorMessage');
+      
+      if (code.length !== 6) {
+        errorMsg.textContent = 'Please enter a valid 6-character link code';
+        errorMsg.style.display = 'block';
+        return;
+      }
+      
+      errorMsg.style.display = 'none';
+      
+      try {
+        const response = await fetch(`${API_ENDPOINT}/whoIsRegistered?linkCode=${code}`);
+        const data = await response.json();
+        
+        if (!data.exists || data.registeredNames.length === 0) {
+          errorMsg.textContent = 'No one has registered with this code yet';
+          errorMsg.style.display = 'block';
+          return;
+        }
+        
+        const nameButtons = document.getElementById('nameButtons');
+        nameButtons.innerHTML = '';
+        
+        data.registeredNames.forEach(name => {
+          const btn = document.createElement('button');
+          btn.className = 'name-button';
+          btn.textContent = name;
+          btn.onclick = function() {
+            selectName(name, data.registeredNames);
+          };
+          nameButtons.appendChild(btn);
+        });
+        
+        document.getElementById('nameSelectionSection').classList.remove('hidden');
+        
+      } catch (error) {
+        errorMsg.textContent = 'Error checking link code. Please try again.';
+        errorMsg.style.display = 'block';
+      }
+    }
+    
+    function selectName(name, allNames) {
+      selectedMyName = name;
+      
+      document.getElementById('myName').value = name;
+      
+      document.querySelectorAll('.name-button').forEach(btn => {
+        if (btn.textContent === name) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
     
     function saveConfig() {
       const myNameInput = document.getElementById('myName').value.trim();
-      const partnerNameInput = document.getElementById('partnerName').value.trim();
       const setupType = document.querySelector('input[name="setupType"]:checked').value;
       const errorMsg = document.getElementById('errorMessage');
       
       if (!myNameInput) {
         errorMsg.textContent = 'Please enter your name';
-        errorMsg.style.display = 'block';
-        return;
-      }
-      
-      if (!partnerNameInput) {
-        errorMsg.textContent = 'Please enter your partner\'s name';
         errorMsg.style.display = 'block';
         return;
       }
@@ -439,14 +552,12 @@
           errorMsg.style.display = 'block';
           return;
         }
-        webhookUrlValue = document.getElementById('webhookUrlJoin').value.trim();
       } else {
         webhookUrlValue = document.getElementById('webhookUrl').value.trim();
       }
       
       const configData = {
         myName: myNameInput,
-        partnerName: partnerNameInput,
         webhookUrl: webhookUrlValue,
         shareLocation: locationEnabled
       };
@@ -479,7 +590,11 @@
       setTimeout(function() {
         const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
         console.log('Return URL:', returnUrl);
+        console.log('Return URL length:', returnUrl.length);
+        
+        // Set the location to return to Pebble
         window.location.href = returnUrl;
+        console.log('window.location.href set - should return to Pebble now');
       }, 1500);
     }
   </script>
