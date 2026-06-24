@@ -1,600 +1,505 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thinking of You - Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <title>Thinking of You — Setup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --rose:        #C0546A;
+      --rose-light:  #F9EDF0;
+      --rose-dark:   #8C3349;
+      --amber-light: #FAEEDA;
+      --amber-dark:  #854F0B;
+      --blue-light:  #E6F1FB;
+      --blue-mid:    #185FA5;
+      --green-light: #E1F5EE;
+      --green-dark:  #0F6E56;
+      --red-light:   #FCEBEB;
+      --red-dark:    #A32D2D;
+      --gray-100:    #F5F5F4;
+      --bg:          #ffffff;
+      --bg2:         #F7F6F3;
+      --border:      rgba(0,0,0,0.09);
+      --border2:     rgba(0,0,0,0.16);
+      --text:        #1a1a18;
+      --text2:       #5a5a54;
+      --text3:       #9a9990;
+      --radius:      10px;
+      --radius-lg:   14px;
     }
-    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --rose-light:  #3d1520;
+        --amber-light: #3a2a0a;
+        --blue-light:  #0d2440;
+        --green-light: #0d3d2e;
+        --red-light:   #3a1818;
+        --gray-100:    #2a2a28;
+        --bg:          #1a1a18;
+        --bg2:         #222220;
+        --border:      rgba(255,255,255,0.09);
+        --border2:     rgba(255,255,255,0.16);
+        --text:        #f0ede8;
+        --text2:       #a8a49e;
+        --text3:       #6a6760;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; background: var(--bg); }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      padding: 20px;
-      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px 16px calc(40px + env(safe-area-inset-bottom));
+      padding-top: calc(24px + env(safe-area-inset-top));
     }
-    
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+
+    .app { max-width: 480px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .header { margin-bottom: 28px; }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px; line-height: 1;
+      display: flex; align-items: center; gap: 10px;
     }
-    
-    h1 {
-      color: #667eea;
-      margin-bottom: 10px;
-      font-size: 28px;
-      text-align: center;
+    .logo-heart { font-size: 22px; }
+    .logo span { color: var(--rose); }
+    .tagline { font-size: 13px; color: var(--text3); margin-top: 5px; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text3); margin-bottom: 10px;
     }
-    
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
-      font-size: 14px;
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 14px;
     }
-    
-    .heart {
-      font-size: 40px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    
-    .section {
-      margin-bottom: 25px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-    }
-    
-    .section h2 {
-      font-size: 18px;
-      color: #667eea;
-      margin-bottom: 15px;
-    }
-    
-    label {
+
+    /* ── Inputs ── */
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #555;
+      font-size: 13px; font-weight: 500;
+      color: var(--text2); margin-bottom: 6px;
     }
-    
-    input[type="text"] {
+    .field input[type="text"] {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 16px;
-      transition: border-color 0.3s;
-    }
-    
-    input[type="text"]:focus {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 11px 14px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
       outline: none;
-      border-color: #667eea;
+      transition: border-color .15s;
     }
-    
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px;
-      background: white;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      margin: 15px 0;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .toggle-container:hover {
-      border-color: #667eea;
-    }
-    
-    .toggle-container.active {
-      border-color: #667eea;
-      background: #f5f7ff;
-    }
-    
-    .toggle-label {
-      flex: 1;
-    }
-    
-    .toggle-label strong {
-      display: block;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    
-    .toggle-label small {
-      color: #666;
-      font-size: 13px;
-    }
-    
-    .toggle-switch {
-      position: relative;
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
-      transition: background 0.3s;
-    }
-    
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-    
-    .toggle-container.active .toggle-switch {
-      background: #667eea;
-    }
-    
-    .toggle-container.active .toggle-switch::after {
-      transform: translateX(24px);
-    }
-    
-    .link-code-display {
-      background: #667eea;
-      color: white;
+    .field input[type="text"]:focus { border-color: var(--rose); }
+    .field input[type="text"]::placeholder { color: var(--text3); }
+
+    /* ── Link code display ── */
+    .code-display {
+      background: var(--rose);
+      border-radius: var(--radius-lg);
       padding: 20px;
-      border-radius: 8px;
       text-align: center;
-      margin: 15px 0;
+      margin-bottom: 14px;
     }
-    
-    .link-code-display .code {
-      font-size: 32px;
-      font-weight: bold;
-      letter-spacing: 4px;
-      font-family: monospace;
-      margin: 10px 0;
+    .code-display .code-label {
+      font-size: 11px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: .08em; color: rgba(255,255,255,0.7); margin-bottom: 8px;
     }
-    
-    .link-code-display .label {
-      font-size: 14px;
-      opacity: 0.9;
+    .code-display .code-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px; letter-spacing: 6px;
+      color: #fff; line-height: 1;
+      margin-bottom: 8px;
     }
-    
+    .code-display .code-hint {
+      font-size: 12px; color: rgba(255,255,255,0.7);
+    }
+
+    /* ── Toggle ── */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px;
+      background: var(--bg2); border-radius: var(--radius);
+      cursor: pointer; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+    }
+    .toggle-row:hover { background: var(--gray-100); }
+    .toggle-text strong { display: block; font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .toggle-text small { font-size: 12px; color: var(--text3); }
+    .toggle-switch {
+      position: relative; width: 44px; height: 24px; flex-shrink: 0;
+      background: var(--border2); border-radius: 12px;
+      transition: background .2s;
+    }
+    .toggle-switch::after {
+      content: ''; position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: #fff; border-radius: 50%;
+      transition: transform .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-row.active .toggle-switch { background: var(--rose); }
+    .toggle-row.active .toggle-switch::after { transform: translateX(20px); }
+
+    /* ── Setup type selector ── */
+    .setup-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .setup-option {
+      padding: 12px; border: 1px solid var(--border2);
+      border-radius: var(--radius); cursor: pointer;
+      text-align: center; transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .setup-option:hover { border-color: var(--rose); background: var(--rose-light); }
+    .setup-option.active { border-color: var(--rose); background: var(--rose-light); }
+    .setup-option strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .setup-option small { font-size: 11px; color: var(--text3); }
+    .setup-option.active small { color: var(--rose-dark); }
+
+    /* ── Name selection buttons ── */
+    .name-btn {
+      width: 100%; padding: 12px 16px;
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: var(--radius); font-size: 14px; font-weight: 500;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      cursor: pointer; text-align: left;
+      transition: all .15s; margin-bottom: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .name-btn:last-child { margin-bottom: 0; }
+    .name-btn:hover { border-color: var(--rose); background: var(--rose-light); }
+    .name-btn.selected { border-color: var(--rose); background: var(--rose); color: #fff; }
+
+    /* ── Info / warning / success boxes ── */
     .info-box {
-      background: #e3f2fd;
-      border-left: 4px solid #2196f3;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-      font-size: 14px;
-      line-height: 1.6;
+      background: var(--blue-light); border-radius: var(--radius);
+      padding: 12px 14px; font-size: 13px; line-height: 1.6;
+      color: var(--blue-mid); margin-top: 12px;
     }
-    
     .warning-box {
-      background: #fff3e0;
-      border-left: 4px solid #ff9800;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-      font-size: 14px;
-      line-height: 1.6;
+      background: var(--amber-light); border-radius: var(--radius);
+      padding: 12px 14px; font-size: 13px; line-height: 1.6;
+      color: var(--amber-dark); margin-top: 12px;
     }
-    
     .success-box {
-      background: #e8f5e9;
-      border-left: 4px solid #4caf50;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-      font-size: 14px;
-      line-height: 1.6;
+      background: var(--green-light); border-radius: var(--radius);
+      padding: 12px 14px; font-size: 13px; line-height: 1.6;
+      color: var(--green-dark); margin-top: 12px; margin-bottom: 12px;
     }
-    
-    .success-box {
-      background: #e8f5e9;
-      border-left: 4px solid #4caf50;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    
-    .name-button {
-      width: 100%;
-      padding: 15px;
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-bottom: 10px;
-    }
-    
-    .name-button:hover {
-      background: #f5f7ff;
-    }
-    
-    .name-button.selected {
-      background: #667eea;
-      color: white;
-    }
-    
-    .radio-group {
-      margin: 15px 0;
-    }
-    
-    .radio-option {
-      padding: 15px;
-      border: 2px solid #e0e0e0;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .radio-option:hover {
-      border-color: #667eea;
-      background: #f5f7ff;
-    }
-    
-    .radio-option input[type="radio"] {
-      margin-right: 10px;
-    }
-    
-    .radio-option.selected {
-      border-color: #667eea;
-      background: #f5f7ff;
-    }
-    
-    .name-button {
-      width: 100%;
-      padding: 15px;
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-bottom: 10px;
-    }
-    
-    .name-button:hover {
-      background: #f5f7ff;
-    }
-    
-    .name-button.selected {
-      background: #667eea;
-      color: white;
-    }
-    
-    .hidden {
+    .err-box {
+      background: var(--red-light); border-radius: var(--radius);
+      padding: 12px 14px; font-size: 13px; line-height: 1.6;
+      color: var(--red-dark); margin-top: 12px;
       display: none;
     }
-    
-    button {
-      width: 100%;
-      padding: 15px;
-      background: #667eea;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 20px;
+
+    /* ── Check code button ── */
+    .btn {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: 11px 16px;
+      font-size: 13px; font-weight: 500; color: var(--text2);
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background .15s, color .15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    
-    button:hover {
-      background: #5568d3;
+    .btn:hover { background: var(--gray-100); color: var(--text); }
+    .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-row .field { flex: 1; margin-bottom: 0; }
+
+    /* ── Save button ── */
+    .save-btn {
+      width: 100%; padding: 15px;
+      background: var(--rose); color: #fff; border: none;
+      border-radius: var(--radius-lg);
+      font-size: 16px; font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; margin-top: 8px;
+      transition: background .15s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
     }
-    
-    button:active {
-      transform: scale(0.98);
+    .save-btn:hover { background: var(--rose-dark); }
+    .save-btn:active { transform: scale(0.98); }
+
+    /* ── Success screen ── */
+    .success-screen { text-align: center; padding: 48px 16px; }
+    .success-screen .big-heart { font-size: 56px; margin-bottom: 20px; }
+    .success-screen h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px; margin-bottom: 10px; color: var(--rose);
     }
-    
-    .error {
-      color: #d32f2f;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
+    .success-screen p { font-size: 15px; color: var(--text2); line-height: 1.6; }
+    .success-screen small { font-size: 13px; color: var(--text3); display: block; margin-top: 24px; }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="heart">♥</div>
-    <h1>Thinking of You</h1>
-    <p class="subtitle">Stay connected across the distance</p>
-    
-    <div class="section">
-      <h2>Your Information</h2>
-      <label for="myName">Your Name</label>
-      <input type="text" id="myName" placeholder="Enter your name" maxlength="30">
+  <div class="app">
+
+    <div class="header">
+      <div class="logo">
+        <span class="logo-heart">♥</span>
+        <div>
+          <div>Thinking <span>of You</span></div>
+          <div class="tagline">Stay connected across the distance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your Info -->
+    <p class="section-label">Your Information</p>
+    <div class="card">
+      <div class="field">
+        <label for="myName">Your name</label>
+        <input type="text" id="myName" placeholder="Enter your name" maxlength="30">
+      </div>
       <div id="nameChangeWarning" class="warning-box hidden">
         ⚠️ Changing your name will update it for this connection. Your partner will see the new name.
       </div>
     </div>
-    
-    <div class="section">
-      <h2>Privacy Settings</h2>
-      <div class="toggle-container" id="locationToggle" onclick="toggleLocation()">
-        <div class="toggle-label">
-          <strong>Share Location with Pings</strong>
-          <small>When enabled, your pings will include your distance from your partner</small>
+
+    <!-- Privacy -->
+    <p class="section-label">Privacy</p>
+    <div class="card">
+      <div class="toggle-row" id="locationToggle" onclick="toggleLocation()">
+        <div class="toggle-text">
+          <strong>Share location with pings</strong>
+          <small>Shows your distance from your partner when you ping</small>
         </div>
         <div class="toggle-switch"></div>
       </div>
       <div class="info-box">
-        🔒 Your exact location is encrypted before being sent. Only you and your partner can see the distance between you.
+        🔒 Your exact location is encrypted before sending. Only you and your partner can calculate the distance between you.
       </div>
     </div>
-    
-    <div class="section">
-      <h2>Connection Setup</h2>
-      <div class="radio-group">
-        <label class="radio-option" id="createOption">
-          <input type="radio" name="setupType" value="create" checked>
-          <strong>Create New Connection</strong><br>
-          <small>Start a new connection and share your code</small>
-        </label>
-        
-        <label class="radio-option" id="joinOption">
-          <input type="radio" name="setupType" value="join">
-          <strong>Join Existing Connection</strong><br>
-          <small>Enter your partner's code to connect</small>
-        </label>
+
+    <!-- Connection Setup -->
+    <p class="section-label">Connection</p>
+    <div class="card">
+      <div class="setup-options">
+        <div class="setup-option active" id="createOption" onclick="switchSetup('create')">
+          <strong>Create</strong>
+          <small>Start a new connection</small>
+        </div>
+        <div class="setup-option" id="joinOption" onclick="switchSetup('join')">
+          <strong>Join</strong>
+          <small>Enter a partner's code</small>
+        </div>
       </div>
-      
+
+      <!-- Create section -->
       <div id="createSection">
-        <div class="link-code-display">
-          <div class="label">Your Link Code</div>
-          <div class="code" id="linkCodeDisplay">------</div>
-          <div class="label">Share this code with your partner</div>
+        <div class="code-display">
+          <div class="code-label">Your link code</div>
+          <div class="code-value" id="linkCodeDisplay">——————</div>
+          <div class="code-hint">Share this with your partner</div>
+        </div>
+        <div class="field">
+          <label for="webhookUrl">Discord webhook URL <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+          <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
         </div>
         <div class="info-box">
-          📱 Your partner should select "Join Existing Connection" and enter this code to connect with you.
-        </div>
-        
-        <label for="webhookUrl">Discord Webhook URL (Optional)</label>
-        <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
-        <div class="info-box">
-          💬 For instant Discord notifications, create a webhook in your server and paste the URL here. Leave blank to use only in-app notifications.
+          💬 Paste a Discord webhook URL to get a notification when your partner pings you, even if the Pebble app is closed.
         </div>
       </div>
-      
+
+      <!-- Join section -->
       <div id="joinSection" class="hidden">
-        <label for="partnerLinkCode">Partner's Link Code</label>
-        <input type="text" id="partnerLinkCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
-        <button type="button" onclick="checkLinkCode()" style="margin-top: 10px;">Check Code</button>
-        
-        <div id="nameSelectionSection" class="hidden">
-          <div class="success-box">
-            ✓ Found existing connection! Which person are you?
+        <div class="btn-row">
+          <div class="field">
+            <label for="partnerLinkCode">Partner's link code</label>
+            <input type="text" id="partnerLinkCode" placeholder="XXXXXX" maxlength="6" style="text-transform:uppercase;letter-spacing:3px;font-family:'DM Serif Display',serif;font-size:20px;">
           </div>
+          <button class="btn" onclick="checkLinkCode()" style="align-self:flex-end;white-space:nowrap;">Check code</button>
+        </div>
+
+        <div id="nameSelectionSection" class="hidden">
+          <div class="success-box">✓ Connection found — which person are you?</div>
           <div id="nameButtons"></div>
         </div>
-        
+
         <div class="info-box">
-          🔗 Ask your partner for their 6-character link code and enter it here.
+          🔗 Ask your partner for their 6-character code from the Create tab.
         </div>
       </div>
+
+      <div class="err-box" id="errorMessage"></div>
     </div>
-    
-    <div class="error" id="errorMessage"></div>
-    
-    <button onclick="saveConfig()">Save & Connect ♥</button>
+
+    <button class="save-btn" onclick="saveConfig()">Save &amp; connect ♥</button>
   </div>
-  
+
   <script>
     const API_ENDPOINT = 'https://mute-elsinore-pokyplays-01040d8f.koyeb.app/api';
-    
+
     const urlParams = new URLSearchParams(window.location.search);
-    const linkCode = urlParams.get('linkCode') || '';
-    const myName = urlParams.get('myName') || '';
-    const webhookUrl = urlParams.get('webhookUrl') || '';
+    const linkCode    = urlParams.get('linkCode')    || '';
+    const myName      = urlParams.get('myName')      || '';
+    const webhookUrl  = urlParams.get('webhookUrl')  || '';
     const shareLocation = urlParams.get('shareLocation') === 'true';
-    
+
     const originalMyName = myName;
     let selectedMyName = '';
     let locationEnabled = shareLocation;
-    
-    console.log('Config page loaded');
-    console.log('linkCode:', linkCode);
-    console.log('myName:', myName);
-    console.log('shareLocation:', shareLocation);
-    
-    document.getElementById('myName').value = myName;
-    document.getElementById('linkCodeDisplay').textContent = linkCode || '------';
-    document.getElementById('webhookUrl').value = webhookUrl;
-    
-    // Set initial location toggle state
-    if (locationEnabled) {
-      document.getElementById('locationToggle').classList.add('active');
-    }
-    
-    function toggleLocation() {
-      const toggle = document.getElementById('locationToggle');
-      locationEnabled = !locationEnabled;
-      if (locationEnabled) {
-        toggle.classList.add('active');
-      } else {
-        toggle.classList.remove('active');
-      }
-    }
-    
+    let currentSetup = 'create';
+
+    // Populate saved values
+    document.getElementById('myName').value        = myName;
+    document.getElementById('linkCodeDisplay').textContent = linkCode || '——————';
+    document.getElementById('webhookUrl').value    = webhookUrl;
+    if (locationEnabled) document.getElementById('locationToggle').classList.add('active');
+
+    // Name change warning
     document.getElementById('myName').addEventListener('input', function() {
-      const nameChangeWarning = document.getElementById('nameChangeWarning');
+      const warn = document.getElementById('nameChangeWarning');
       if (originalMyName && this.value.trim() !== originalMyName) {
-        nameChangeWarning.classList.remove('hidden');
+        warn.classList.remove('hidden');
       } else {
-        nameChangeWarning.classList.add('hidden');
+        warn.classList.add('hidden');
       }
     });
-    
-    const createOption = document.getElementById('createOption');
-    const joinOption = document.getElementById('joinOption');
-    const createSection = document.getElementById('createSection');
-    const joinSection = document.getElementById('joinSection');
-    
-    document.querySelectorAll('input[name="setupType"]').forEach(radio => {
-      radio.addEventListener('change', function() {
-        if (this.value === 'create') {
-          createSection.classList.remove('hidden');
-          joinSection.classList.add('hidden');
-          createOption.classList.add('selected');
-          joinOption.classList.remove('selected');
-        } else {
-          createSection.classList.add('hidden');
-          joinSection.classList.remove('hidden');
-          createOption.classList.remove('selected');
-          joinOption.classList.add('selected');
-        }
-      });
-    });
-    
-    document.getElementById('partnerLinkCode').addEventListener('input', function(e) {
+
+    // Auto-uppercase link code
+    document.getElementById('partnerLinkCode').addEventListener('input', function() {
       this.value = this.value.toUpperCase();
       document.getElementById('nameSelectionSection').classList.add('hidden');
     });
-    
+
+    function toggleLocation() {
+      locationEnabled = !locationEnabled;
+      document.getElementById('locationToggle').classList.toggle('active', locationEnabled);
+    }
+
+    function switchSetup(type) {
+      currentSetup = type;
+      document.getElementById('createSection').classList.toggle('hidden', type !== 'create');
+      document.getElementById('joinSection').classList.toggle('hidden', type !== 'join');
+      document.getElementById('createOption').classList.toggle('active', type === 'create');
+      document.getElementById('joinOption').classList.toggle('active', type === 'join');
+    }
+
     async function checkLinkCode() {
-      const code = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
-      const errorMsg = document.getElementById('errorMessage');
-      
+      const code    = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
+      const errBox  = document.getElementById('errorMessage');
+
+      errBox.style.display = 'none';
+
       if (code.length !== 6) {
-        errorMsg.textContent = 'Please enter a valid 6-character link code';
-        errorMsg.style.display = 'block';
+        errBox.textContent = 'Please enter a valid 6-character link code.';
+        errBox.style.display = 'block';
         return;
       }
-      
-      errorMsg.style.display = 'none';
-      
+
       try {
         const response = await fetch(`${API_ENDPOINT}/whoIsRegistered?linkCode=${code}`);
         const data = await response.json();
-        
+
         if (!data.exists || data.registeredNames.length === 0) {
-          errorMsg.textContent = 'No one has registered with this code yet';
-          errorMsg.style.display = 'block';
+          errBox.textContent = 'No one has registered with this code yet.';
+          errBox.style.display = 'block';
           return;
         }
-        
+
         const nameButtons = document.getElementById('nameButtons');
         nameButtons.innerHTML = '';
-        
+
         data.registeredNames.forEach(name => {
           const btn = document.createElement('button');
-          btn.className = 'name-button';
+          btn.className = 'name-btn';
           btn.textContent = name;
-          btn.onclick = function() {
-            selectName(name, data.registeredNames);
-          };
+          btn.onclick = () => selectName(name);
           nameButtons.appendChild(btn);
         });
-        
+
         document.getElementById('nameSelectionSection').classList.remove('hidden');
-        
-      } catch (error) {
-        errorMsg.textContent = 'Error checking link code. Please try again.';
-        errorMsg.style.display = 'block';
+
+      } catch (e) {
+        errBox.textContent = 'Could not reach the server. Please try again.';
+        errBox.style.display = 'block';
       }
     }
-    
-    function selectName(name, allNames) {
+
+    function selectName(name) {
       selectedMyName = name;
-      
       document.getElementById('myName').value = name;
-      
-      document.querySelectorAll('.name-button').forEach(btn => {
-        if (btn.textContent === name) {
-          btn.classList.add('selected');
-        } else {
-          btn.classList.remove('selected');
-        }
+      document.querySelectorAll('.name-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.textContent === name);
       });
     }
-    
+
     function saveConfig() {
       const myNameInput = document.getElementById('myName').value.trim();
-      const setupType = document.querySelector('input[name="setupType"]:checked').value;
-      const errorMsg = document.getElementById('errorMessage');
-      
+      const errBox = document.getElementById('errorMessage');
+      errBox.style.display = 'none';
+
       if (!myNameInput) {
-        errorMsg.textContent = 'Please enter your name';
-        errorMsg.style.display = 'block';
+        errBox.textContent = 'Please enter your name before saving.';
+        errBox.style.display = 'block';
         return;
       }
-      
+
       let partnerLinkCode = '';
       let webhookUrlValue = '';
-      
-      if (setupType === 'join') {
+
+      if (currentSetup === 'join') {
         partnerLinkCode = document.getElementById('partnerLinkCode').value.trim().toUpperCase();
         if (partnerLinkCode.length !== 6) {
-          errorMsg.textContent = 'Please enter a valid 6-character link code';
-          errorMsg.style.display = 'block';
+          errBox.textContent = 'Please enter a valid 6-character link code.';
+          errBox.style.display = 'block';
           return;
         }
       } else {
         webhookUrlValue = document.getElementById('webhookUrl').value.trim();
       }
-      
+
       const configData = {
         myName: myNameInput,
         webhookUrl: webhookUrlValue,
         shareLocation: locationEnabled
       };
-      
+
       if (originalMyName && originalMyName !== myNameInput) {
         configData.oldName = originalMyName;
       }
-      
-      if (setupType === 'join') {
+      if (currentSetup === 'join') {
         configData.partnerLinkCode = partnerLinkCode;
       }
-      
-      const container = document.querySelector('.container');
-      container.innerHTML = `
-        <div class="heart" style="font-size: 60px; margin: 40px 0;">✓</div>
-        <h1 style="color: #4caf50; margin-bottom: 20px;">Settings Saved!</h1>
-        <p style="text-align: center; font-size: 18px; color: #666;">
-          Your connection is configured.<br>
-          ${setupType === 'join' ? 'Joined with code: ' + partnerLinkCode : 'Your code: ' + (linkCode || 'NEW')}<br>
-          <small style="color: #999;">Location sharing: ${locationEnabled ? 'Enabled' : 'Disabled'}</small>
-        </p>
-        <p style="text-align: center; margin-top: 20px; color: #999; font-size: 14px;">
-          Returning to watch...
-        </p>
+
+      // Show success screen
+      document.querySelector('.app').innerHTML = `
+        <div class="success-screen">
+          <div class="big-heart">♥</div>
+          <h2>All set!</h2>
+          <p>
+            Your connection is configured.<br>
+            ${currentSetup === 'join'
+              ? 'Joined with code <strong>' + partnerLinkCode + '</strong>'
+              : 'Your code: <strong>' + (linkCode || 'new connection') + '</strong>'}
+          </p>
+          <small>Location sharing: ${locationEnabled ? 'on' : 'off'} · Returning to your watch…</small>
+        </div>
       `;
-      
-      console.log('Attempting to return to Pebble...');
-      console.log('configData:', JSON.stringify(configData));
-      
-      setTimeout(function() {
-        const returnUrl = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
-        console.log('Return URL:', returnUrl);
-        console.log('Return URL length:', returnUrl.length);
-        
-        // Set the location to return to Pebble
-        window.location.href = returnUrl;
-        console.log('window.location.href set - should return to Pebble now');
+
+      setTimeout(() => {
+        window.location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configData));
       }, 1500);
     }
   </script>
